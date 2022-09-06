@@ -4,10 +4,12 @@
 quiz_file=quiz.txt
 score=0
 
+stty -echo
+
 function slow() {
     for ((i=0; i<${#1} ; i++)) ; do 
         echo -n "${1:i:1}"
-        sleep 0.1
+        sleep 0.07
     done
 }
 # check if quiz file exists
@@ -20,9 +22,10 @@ QCOUNT="`wc -l $quiz_file | cut -f1 -d' '`"
 
 #clear
 GREEN='\033[0;32m'
-RED='\033[0;31m'
+#RED='\033[0;31m'
 
 function quiz() {
+score=0
 # game loop (loop over quiz file line/line)
 while read -u9 line
 do
@@ -39,18 +42,28 @@ do
     1: $choice1
     2: $choice2
     3: $choice3
-Skriv en siffra: "
+1, 2, 3?: "
 
     # read player choice
-    read -p " " player_choice
+    read -t .1 -n 100 buf
+    stty echo
+    if [[ -z $buf ]]; then buf=""; else buf="-i $buf"; fi;
+    read -t 10 -e $buf -p " " player_choice
+    stty -echo
 
     # compare player against solution & increment score
+    if [ "$player_choice" == "" ]
+    then
+        echo
+        slow "Du var för seg!"
+    else
     if [ "$player_choice" == "$solution" ]
     then
         score=$(( ++score ))
         slow "Rätt svar!"
     else
         slow "Feeeel"
+    fi
     fi
 
     echo
@@ -66,6 +79,8 @@ if [ "$score" == "$QCOUNT" ]
 then
     slow "Grattis! Du har klarat quizet!"
     sleep 2
+    stty echo
+    eject > /dev/null 2>&1
     cmatrix
 else
     slow "Uh va dåligt, försök igen."
@@ -78,8 +93,10 @@ fi
 clear
 echo
 printf "$GREEN%s%*s\n" 
-read -p "    Starta på egen risk... " player_choice
+read -p "    Tryck Enter för att starta... " player_choice
+stty -echo
 clear
+mpg123 ~/musik.mp3 > /dev/null 2>&1
 reset='\033[0m'
 BG='\033[47m'
 FG='\033[0;30m'
@@ -97,7 +114,7 @@ do
 done
 clear
 
-while [ "$score" -lt $QCOUNT ]
+while [ "$score" -lt "$QCOUNT" ]
 do
  quiz
 done
