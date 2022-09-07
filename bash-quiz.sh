@@ -96,7 +96,7 @@ printf "$GREEN%s%*s\n"
 read -p "    Tryck Enter för att starta... " player_choice
 stty -echo
 clear
-mpg123 ~/musik.mp3 > /dev/null 2>&1
+mpg123 ~/musik.mp3 > /dev/null 2>&1 &
 reset='\033[0m'
 BG='\033[47m'
 FG='\033[0;30m'
