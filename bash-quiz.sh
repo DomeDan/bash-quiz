@@ -82,6 +82,7 @@ then
     stty echo
     eject > /dev/null 2>&1
     cmatrix
+    killall mpg123
 else
     slow "Uh va dåligt, försök igen."
     sleep 1
@@ -92,11 +93,18 @@ fi
 
 clear
 echo
+killall mpg123
+mpg123 -l 0 ~/musik.mp3 > /dev/null 2>&1 &
 printf "$GREEN%s%*s\n" 
 read -p "    Tryck Enter för att starta... " player_choice
 stty -echo
 clear
+<<<<<<< HEAD
 mpg123 ~/musik.mp3 > /dev/null 2>&1 &
+=======
+killall mpg123
+mpg123 -l 0 ~/musik.mp3 > /dev/null 2>&1 &
+>>>>>>> 40379e3 (Fixed some mpg123 stuff)
 reset='\033[0m'
 BG='\033[47m'
 FG='\033[0;30m'
