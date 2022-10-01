@@ -85,7 +85,7 @@ then
     killall mpg123
 else
     slow "Uh va dåligt, försök igen."
-    sleep 1
+    sleep 3
     clear
 fi
 }
@@ -93,8 +93,6 @@ fi
 
 clear
 echo
-killall mpg123
-mpg123 -l 0 ~/musik.mp3 > /dev/null 2>&1 &
 printf "$GREEN%s%*s\n" 
 read -p "    Tryck Enter för att starta... " player_choice
 stty -echo
