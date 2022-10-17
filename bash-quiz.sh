@@ -4,7 +4,7 @@
 quiz_file=quiz.txt
 score=0
 
-stty -echo
+#stty -echo
 
 function slow() {
     for ((i=0; i<${#1} ; i++)) ; do 
@@ -94,7 +94,22 @@ fi
 clear
 echo
 printf "$GREEN%s%*s\n" 
-read -p "    Tryck Enter för att starta... " player_choice
+#read -p "    Tryck Enter för att starta... " player_choice
+pass="fel"
+while :
+do
+    read -p "    Skriv lösenordet: " pass
+    if [ -z $pass ]
+    then
+        pass="fel"
+    fi
+    if [ ${pass,,} == "qwerty" ]
+    then
+        break;
+    else
+        echo "    Fel."
+    fi
+done
 stty -echo
 clear
 killall mpg123
@@ -102,7 +117,8 @@ mpg123 -l 0 ~/musik.mp3 > /dev/null 2>&1 &
 reset='\033[0m'
 BG='\033[47m'
 FG='\033[0;30m'
-text="LET ME OUT! LET ME OUT! LET ME OUT! LET ME OUT! LET ME OUT! LET ME OUT! LET ME OUT! LET ME OUT! "
+#text="LET ME OUT! LET ME OUT! LET ME OUT! LET ME OUT! LET ME OUT! LET ME OUT! LET ME OUT! LET ME OUT! "
+text="#################################################################################################"
 cols=$(tput cols)
 # Left Aligned
 x=$((cols-${#text}))
